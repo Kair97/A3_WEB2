@@ -42,6 +42,9 @@ async function loadBlogs(){
         <h5 class="card-title">${blog.title}</h5>
         <p class="card-text">${blog.body}</p>
         <p class="text-muted">Author: ${blog.author}</p>
+        <button class="btn btn-secondary btn-sm me-2" onclick="openUpdateModal('${blog._id}', '${blog.title}', '${blog.body}', '${blog.author}')">
+          Edit
+        </button>
         <button class="btn btn-danger btn-sm" onclick="deleteBlog('${blog._id}')">
           Delete
         </button>
@@ -50,9 +53,51 @@ async function loadBlogs(){
 
     blogsDiv.appendChild(div);
 });
-
-
 }
+
+let currentBlogId = null;
+
+function openUpdateModal(id, title, body, author){
+
+  currentBlogId = id
+
+  document.getElementById("updateTitle").value = title;
+  document.getElementById("updateBody").value = body;
+  document.getElementById("updateAuthor").value = author;
+
+  const modal = new bootstrap.Modal(
+
+    document.getElementById("updateModal")
+  );
+  modal.show();
+
+} 
+
+
+async function submitUpdate() {
+    const title = document.getElementById("updateTitle").value;
+    const body = document.getElementById("updateBody").value;
+    const author = document.getElementById("updateAuthor").value;
+
+    if (!title || !body) {
+        alert("Title and body are required");
+        return;
+    }
+
+    await fetch(`${API_URL}/${currentBlogId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, body, author })
+    });
+
+    // Close modal
+    const modalElement = document.getElementById("updateModal");
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    modalInstance.hide();
+
+    loadBlogs();
+}
+
 
 async function deleteBlog(id){
     await fetch(`${API_URL}/${id}`, {

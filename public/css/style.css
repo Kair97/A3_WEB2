@@ -5,7 +5,7 @@ body{
 
 .form input, .form textarea{
     display: block;
-    width: 300px;
+    width: 50rem;
     margin-bottom:  10px;
 }
 
@@ -13,4 +13,18 @@ body{
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
+}
+
+.taskiips{
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 500px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.taskiips:focus {
+  border-color: green;
+  outline: none;
+  box-shadow: 0 0 5px rgba(37, 99, 235, 0.3);
 }
