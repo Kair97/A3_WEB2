@@ -55,6 +55,50 @@ async function loadBlogs(){
 });
 }
 
+async function loadById(){
+
+  const BlogIdInput = document.getElementById("blogIdInput");
+  const blogIdInputValue = BlogIdInput.value.trim();
+
+  if (!blogIdInputValue){
+    alert("Id is required");
+    return 
+  }
+
+  const res = await fetch(`${API_URL}/${blogIdInputValue}`);
+
+  if (!res.ok) {
+    alert("Blog not found")
+    return 
+  }
+
+  const curBlog = await res.json();
+
+  const blogById = document.getElementById("blogId");
+  blogById.innerHTML ="";
+
+  const div = document.createElement("div");
+  div.className = "card mb-3";
+  div.innerHTML =  `
+  <div class="card-body blogIdf">
+        <h5 class="card-title">${curBlog.title}</h5>
+        <p class="card-text">${curBlog.body}</p>
+        <p class="text-muted">Author: ${curBlog.author}</p>
+        <button class="btn btn-secondary btn-sm me-2" onclick="openUpdateModal('${curBlog._id}', '${curBlog.title}', '${curBlog.body}', '${curBlog.author}')">
+          Edit
+        </button>
+        <button class="btn btn-danger btn-sm" onclick="deleteBlog('${curBlog._id}')">
+          Delete
+        </button>
+      </div>
+    `;
+
+    blogById.appendChild(div);
+    
+  BlogIdInput.value = ""
+
+}
+
 let currentBlogId = null;
 
 function openUpdateModal(id, title, body, author){
